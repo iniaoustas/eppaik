@@ -47,7 +47,7 @@
 	--strNavShadeColor:  #400020;
 	--strNavTextColor:   #ffffff;
 	
-	--strPageBGColor:    #ffffff;
+	--strPageBGColor:    #800040;
 	--strExBGColor:      #c9dce3;
 }
 
@@ -965,7 +965,7 @@ function ItemState(){
 
 var Feedback = '';
 var Correct = '<b>&#x03A3;&#x03C5;&#x03B3;&#x03C7;&#x03B1;&#x03C1;&#x03B7;&#x03C4;&#x03AE;&#x03C1;&#x03B9;&#x03B1;!!! &#x03A4;&#x03B1; &#x03B2;&#x03C1;&#x03AE;&#x03BA;&#x03B5;&#x03C2; &#x03CC;&#x03BB;&#x03B1;.</b>';
-var Incorrect = '<b>&#x039A;&#x03AC;&#x03C4;&#x03B9; &#x03B4;&#x03B5;&#x03BD; &#x03C0;&#x03AE;&#x03B3;&#x03B5; &#x03BA;&#x03B1;&#x03BB;&#x03AC;! &#x0388;&#x03C7;&#x03B5;&#x03B9;&#x03C2; &#x03C4;&#x03B7;&#x03BD; &#x03B5;&#x03C5;&#x03BA;&#x03B1;&#x03B9;&#x03C1;&#x03AF;&#x03B1; &#x03BD;&#x03B1; &#x03B4;&#x03B9;&#x03BF;&#x03C1;&#x03B8;&#x03CE;&#x03C3;&#x03B5;&#x03B9;&#x03C2; &#x03C4;&#x03B9;&#x03C2; &#x03BB;&#x03B1;&#x03BD;&#x03B8;&#x03B1;&#x03C3;&#x03BC;&#x03AD;&#x03BD;&#x03B5;&#x03C2; &#x03B1;&#x03C0;&#x03B1;&#x03BD;&#x03C4;&#x03AE;&#x03C3;&#x03B5;&#x03B9;&#x03C2; &#x03C3;&#x03BF;&#x03C5;</b>'; 
+var Incorrect = '<b>&#x039A;&#x03AC;&#x03C4;&#x03B9; &#x03B4;&#x03B5;&#x03BD; &#x03C0;&#x03AE;&#x03B3;&#x03B5; &#x03BA;&#x03B1;&#x03BB;&#x03AC;! <br>&#x0388;&#x03C7;&#x03B5;&#x03B9;&#x03C2; &#x03C4;&#x03B7;&#x03BD; &#x03B5;&#x03C5;&#x03BA;&#x03B1;&#x03B9;&#x03C1;&#x03AF;&#x03B1; &#x03BD;&#x03B1; &#x03B4;&#x03B9;&#x03BF;&#x03C1;&#x03B8;&#x03CE;&#x03C3;&#x03B5;&#x03B9;&#x03C2; &#x03C4;&#x03B9;&#x03C2; &#x03BB;&#x03B1;&#x03BD;&#x03B8;&#x03B1;&#x03C3;&#x03BC;&#x03AD;&#x03BD;&#x03B5;&#x03C2; &#x03B1;&#x03C0;&#x03B1;&#x03BD;&#x03C4;&#x03AE;&#x03C3;&#x03B5;&#x03B9;&#x03C2; &#x03C3;&#x03BF;&#x03C5;</b>'; 
 var GiveHint = 'The next correct letter has been added to the answer.';
 var CaseSensitive = false;
 var YourScoreIs = '<b>&#x03A0;&#x03BF;&#x03C3;&#x03BF;&#x03C3;&#x03C4;&#x03CC; &#x03B5;&#x03C0;&#x03B9;&#x03C4;&#x03C5;&#x03C7;&#x03AF;&#x03B1;&#x03C2;</b>';
@@ -1038,6 +1038,8 @@ function StartUp(){
 	
 	ClearTextBoxes();
 	
+
+	StartTimer();
 
 
 }
@@ -1135,6 +1137,8 @@ function CheckAnswers(){
 	if ((AllCorrect == true)||(Finished == true)){
 	
 
+
+		window.clearInterval(Interval);
 
 		TimeOver = true;
 		Locked = true;
@@ -1309,6 +1313,51 @@ function TypeChars(Chars){
 }
 
 
+function TimesUp() {
+	document.getElementById('Timer').innerHTML = '&#x03A4;&#x03B5;&#x03BB;&#x03B5;&#x03AF;&#x03C9;&#x03C3;&#x03B5; &#x03BF; &#x03C7;&#x03C1;&#x03CC;&#x03BD;&#x03BF;&#x03C2; &#x03C3;&#x03BF;&#x03C5;!! &#x0394;&#x03B5;&#x03BD; &#x03C0;&#x03B5;&#x03B9;&#x03C1;&#x03AC;&#x03B6;&#x03B5;&#x03B9; &#x03BE;&#x03B1;&#x03BD;&#x03B1;&#x03C0;&#x03C1;&#x03BF;&#x03C3;&#x03C0;&#x03AC;&#x03B8;&#x03B7;&#x03C3;&#x03B5;';
+
+	TimeOver = true;
+	Finished = true;
+	CheckAnswers();
+	Locked = true;
+
+}
+
+
+
+
+
+
+//CODE FOR HANDLING TIMER
+//Timer code
+var Seconds = 90;
+var Interval = null;
+
+function StartTimer(){
+	Interval = window.setInterval('DownTime()',1000);
+	document.getElementById('TimerText').style.display = 'inline';
+}
+
+function DownTime(){
+	var ss = Seconds % 60;
+	if (ss<10){
+		ss='0' + ss + '';
+	}
+
+	var mm = Math.floor(Seconds / 60);
+
+	if (document.getElementById('Timer') == null){
+		return;
+	}
+
+	document.getElementById('TimerText').innerHTML = mm + ':' + ss;
+	if (Seconds < 1){
+		window.clearInterval(Interval);
+		TimeOver = true;
+		TimesUp();
+	}
+	Seconds--;
+}
 
 
 
@@ -1335,14 +1384,16 @@ function TypeChars(Chars){
 <div class="Titles">
 	<h2 class="ExerciseTitle">&#x039A;&#x03CD;&#x03BA;&#x03BB;&#x03BF;&#x03C2; &#x03B6;&#x03C9;&#x03AE;&#x03C2; &#x03C0;&#x03C1;&#x03BF;&#x03CA;&#x03CC;&#x03BD;&#x03C4;&#x03C9;&#x03BD; - Quiz &#x0391;&#x03BD;&#x03B1;&#x03C4;&#x03C1;&#x03BF;&#x03C6;&#x03BF;&#x03B4;&#x03CC;&#x03C4;&#x03B7;&#x03C3;&#x03B7;&#x03C2;</h2>
 
-	<h3 class="ExerciseSubtitle">&#x0386;&#x03C3;&#x03BA;&#x03B7;&#x03C3;&#x03B7; &#x03C3;&#x03C5;&#x03BC;&#x03C0;&#x03BB;&#x03AE;&#x03C1;&#x03C9;&#x03C3;&#x03B7;&#x03C2; &#x03BA;&#x03B5;&#x03BD;&#x03CE;&#x03BD;</h3>
+	<h3 class="ExerciseSubtitle">&#x0391;&#x03C3;&#x03BA;&#x03B7;&#x03C3;&#x03B7; &#x03C3;&#x03C5;&#x03BC;&#x03C0;&#x03BB;&#x03B7;&#x03C1;&#x03C9;&#x03C3;&#x03B7;&#x03C2; &#x03BA;&#x03B5;&#x03BD;&#x03C9;&#x03BD;</h3>
 
+
+<div id="Timer"><span id="TimerText">&#160;&#160;</span></div>
 
 
 </div>
 
 <div id="InstructionsDiv" class="StdDiv">
-	<div id="Instructions"><b>&#x03A3;&#x03C5;&#x03BC;&#x03C0;&#x03BB;&#x03B7;&#x03C1;&#x03CE;&#x03C3;&#x03C4;&#x03B5; &#x03C4;&#x03B1; &#x03BA;&#x03B5;&#x03BD;&#x03AC; &#x03B5;&#x03C0;&#x03B9;&#x03BB;&#x03AD;&#x03B3;&#x03BF;&#x03BD;&#x03C4;&#x03B1;&#x03C2; &#x03C4;&#x03B7;&#x03BD; &#x03C3;&#x03C9;&#x03C3;&#x03C4;&#x03AE; &#x03BB;&#x03AD;&#x03BE;&#x03B7; &#x03B1;&#x03C0;&#x03CC; &#x03C4;&#x03B1; drop-down menu.</b><br /><br /></div>
+	<div id="Instructions"><b>&#x03A3;&#x03C5;&#x03BC;&#x03C0;&#x03BB;&#x03B7;&#x03C1;&#x03C9;&#x03C3;&#x03C4;&#x03B5; &#x03C4;&#x03B1; &#x03BA;&#x03B5;&#x03BD;&#x03B1;</b><br /><br /></div>
 </div>
 
 

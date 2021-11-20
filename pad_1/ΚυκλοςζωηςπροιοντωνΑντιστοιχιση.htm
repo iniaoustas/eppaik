@@ -47,7 +47,7 @@
 	--strNavShadeColor:  #400020;
 	--strNavTextColor:   #ffffff;
 	
-	--strPageBGColor:    #ffffff;
+	--strPageBGColor:    #800040;
 	--strExBGColor:      #c9dce3;
 }
 
@@ -992,7 +992,7 @@ var listener = function(e) {
 document.addEventListener('touchmove', listener, { passive:false });
 
 var CorrectResponse = '<b>&#x03A3;&#x03C5;&#x03B3;&#x03C7;&#x03B1;&#x03C1;&#x03B7;&#x03C4;&#x03AE;&#x03C1;&#x03B9;&#x03B1;!!! &#x03A4;&#x03B1; &#x03B2;&#x03C1;&#x03AE;&#x03BA;&#x03B5;&#x03C2; &#x03CC;&#x03BB;&#x03B1;.</b>';
-var IncorrectResponse = '<b>&#x039A;&#x03AC;&#x03C4;&#x03B9; &#x03B4;&#x03B5;&#x03BD; &#x03C0;&#x03AE;&#x03B3;&#x03B5; &#x03BA;&#x03B1;&#x03BB;&#x03AC;! &#x039E;&#x03B1;&#x03BD;&#x03B1;&#x03C0;&#x03C1;&#x03BF;&#x03C3;&#x03C0;&#x03AC;&#x03B8;&#x03B7;&#x03C3;&#x03B5;</b>';
+var IncorrectResponse = '<b>&#x039A;&#x03AC;&#x03C4;&#x03B9; &#x03B4;&#x03B5;&#x03BD; &#x03C0;&#x03AE;&#x03B3;&#x03B5; &#x03BA;&#x03B1;&#x03BB;&#x03AC;! <br>&#x0388;&#x03C7;&#x03B5;&#x03B9;&#x03C2; &#x03C4;&#x03B7;&#x03BD; &#x03B5;&#x03C5;&#x03BA;&#x03B1;&#x03B9;&#x03C1;&#x03AF;&#x03B1; &#x03BD;&#x03B1; &#x03B4;&#x03B9;&#x03BF;&#x03C1;&#x03B8;&#x03CE;&#x03C3;&#x03B5;&#x03B9;&#x03C2; &#x03C4;&#x03B9;&#x03C2; &#x03BB;&#x03B1;&#x03BD;&#x03B8;&#x03B1;&#x03C3;&#x03BC;&#x03AD;&#x03BD;&#x03B5;&#x03C2; &#x03B1;&#x03C0;&#x03B1;&#x03BD;&#x03C4;&#x03AE;&#x03C3;&#x03B5;&#x03B9;&#x03C2; &#x03C3;&#x03BF;&#x03C5;</b>';
 var YourScoreIs = '<b>&#x03A0;&#x03BF;&#x03C3;&#x03BF;&#x03C3;&#x03C4;&#x03CC; &#x03B5;&#x03C0;&#x03B9;&#x03C4;&#x03C5;&#x03C7;&#x03AF;&#x03B1;&#x03C2;</b>';
 var FeedbackWidth = 200; //default
 var ExBGColor = getComputedStyle(document.documentElement).getPropertyValue('--strExBGColor');
@@ -1206,6 +1206,8 @@ DragEx.Setup = function(){
 		ResizeTimer = setTimeout(function(){DragEx.SetInitialPositions(false)}, 250);
 	});
 
+
+	StartTimer();
 	
 
 };
@@ -1510,6 +1512,8 @@ function CheckAnswers(){
 	if ((AllDone == true)||(TimeOver == true)){
 
 
+		window.clearInterval(Interval);
+
 		TimeOver = true;
 		Locked = true;
 		Finished = true;
@@ -1523,7 +1527,53 @@ function CheckAnswers(){
 }
 
 
+function TimesUp() {
+	document.getElementById('Timer').innerHTML = '<b>&#x03A4;&#x03B5;&#x03BB;&#x03B5;&#x03AF;&#x03C9;&#x03C3;&#x03B5; &#x03BF; &#x03C7;&#x03C1;&#x03CC;&#x03BD;&#x03BF;&#x03C2; &#x03C3;&#x03BF;&#x03C5;!! <br>&#x0394;&#x03B5;&#x03BD; &#x03C0;&#x03B5;&#x03B9;&#x03C1;&#x03AC;&#x03B6;&#x03B5;&#x03B9; &#x03BE;&#x03B1;&#x03BD;&#x03B1;&#x03C0;&#x03C1;&#x03BF;&#x03C3;&#x03C0;&#x03AC;&#x03B8;&#x03B7;&#x03C3;&#x03B5;</b>';
 
+	RefreshImages();
+
+	TimeOver = true;
+	CheckAnswers();
+	Locked = true;
+
+}
+
+
+
+
+
+
+
+//CODE FOR HANDLING TIMER
+//Timer code
+var Seconds = 180;
+var Interval = null;
+
+function StartTimer(){
+	Interval = window.setInterval('DownTime()',1000);
+	document.getElementById('TimerText').style.display = 'inline';
+}
+
+function DownTime(){
+	var ss = Seconds % 60;
+	if (ss<10){
+		ss='0' + ss + '';
+	}
+
+	var mm = Math.floor(Seconds / 60);
+
+	if (document.getElementById('Timer') == null){
+		return;
+	}
+
+	document.getElementById('TimerText').innerHTML = mm + ':' + ss;
+	if (Seconds < 1){
+		window.clearInterval(Interval);
+		TimeOver = true;
+		TimesUp();
+	}
+	Seconds--;
+}
 
 
 
@@ -1550,6 +1600,8 @@ function CheckAnswers(){
 
 	<h3 class="ExerciseSubtitle">&#x0386;&#x03C3;&#x03BA;&#x03B7;&#x03C3;&#x03B7; &#x03B1;&#x03BD;&#x03C4;&#x03B9;&#x03C3;&#x03C4;&#x03BF;&#x03AF;&#x03C7;&#x03B9;&#x03C3;&#x03B7;&#x03C2;</h3>
 
+
+<div id="Timer">&#160;<span id="TimerText">&#160;&#160;</span>&#160;</div>
 
 
 </div>
